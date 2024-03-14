@@ -16,6 +16,20 @@ In the meantime, below is an example of what you can do with just a few lines of
 num_points = st.slider("Number of points in spiral", 1, 10000, 1100)
 num_turns = st.slider("Number of turns in spiral", 1, 300, 31)
 
+st.title('ScrumBuddy: KI-gestützter Story Points Schätzer')
+
+# User input für die User Story
+user_story = st.text_area("Geben Sie die Beschreibung der User Story ein:")
+
+# Schätzbutton
+if st.button('Schätzen'):
+    # Hier würde die Logik zur Schätzung der Story Points stehen
+    estimated_story_points = "Hier kommt die geschätzte Anzahl der Story Points hin"
+    reasoning = "Hier kommt das Reasoning hinter der Schätzung hin"
+
+    st.write(f"### Geschätzte Story Points: {estimated_story_points}")
+    st.write(f"### Reasoning: {reasoning}")
+
 indices = np.linspace(0, 1, num_points)
 theta = 2 * np.pi * num_turns * indices
 radius = indices
