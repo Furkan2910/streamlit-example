@@ -1,36 +1,48 @@
+@@ -1,21 +1,35 @@
 import altair as alt
 import numpy as np
 import pandas as pd
 import streamlit as st
-
-import streamlit as st
-import pandas as pd
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.feature_extraction.text import TfidfVectorizer
-import joblib
-
-# Laden des vorab trainierten Modells und des TF-IDF-Vektorisierers
-model = joblib.load('path_to_your_trained_model.pkl')
-tfidf_vectorizer = joblib.load('path_to_your_tfidf_vectorizer.pkl')
+"""
+# Welcome to Streamlit!
+Edit `/streamlit_app.py` to customize this app to your heart's desire :heart:.
+If you have any questions, checkout our [documentation](https://docs.streamlit.io) and [community
+forums](https://discuss.streamlit.io).
+In the meantime, below is an example of what you can do with just a few lines of code:
+"""
+num_points = st.slider("Number of points in spiral", 1, 10000, 1100)
+num_turns = st.slider("Number of turns in spiral", 1, 300, 31)
 
 st.title('ScrumBuddy: KI-gestützter Story Points Schätzer')
 
-# Nutzereingabe für die User Story
+# User input für die User Story
 user_story = st.text_area("Geben Sie die Beschreibung der User Story ein:")
 
-# Button zum Auslösen der Schätzung
+# Schätzbutton
 if st.button('Schätzen'):
-    # Verarbeitung der User Story mit TF-IDF
-    processed_features = tfidf_vectorizer.transform([user_story])
+    # Hier würde die Logik zur Schätzung der Story Points stehen
+    estimated_story_points = "Hier kommt die geschätzte Anzahl der Story Points hin"
+    reasoning = "Hier kommt das Reasoning hinter der Schätzung hin"
 
-    # Schätzung der Story Points
-    estimated_story_points = model.predict(processed_features)
+    st.write(f"### Geschätzte Story Points: {estimated_story_points}")
+    st.write(f"### Reasoning: {reasoning}")
 
-    st.write(f"### Geschätzte Story Points: {estimated_story_points[0]}")
-
-# Beispiel für das Einpflegen eines Datensatzes, falls benötigt
-uploaded_file = st.file_uploader("Laden Sie Ihren Datensatz hoch", type=['csv'])
-if uploaded_file is not None:
-    data = pd.read_csv(uploaded_file)
-    st.write(data)
-
+indices = np.linspace(0, 1, num_points)
+theta = 2 * np.pi * num_turns * indices
+radius = indices
+x = radius * np.cos(theta)
+y = radius * np.sin(theta)
+df = pd.DataFrame({
+    "x": x,
+    "y": y,
+    "idx": indices,
+    "rand": np.random.randn(num_points),
+})
+st.altair_chart(alt.Chart(df, height=700, width=700)
+    .mark_point(filled=True)
+    .encode(
+        x=alt.X("x", axis=None),
+        y=alt.Y("y", axis=None),
+        color=alt.Color("idx", legend=None, scale=alt.Scale()),
+        size=alt.Size("rand", legend=None, scale=alt.Scale(range=[1, 150])),
+    ))
